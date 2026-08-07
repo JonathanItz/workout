@@ -2,6 +2,8 @@
 
 A small mobile-first daily workout checklist. Check something off and it slides into a **Completed** list with a timestamp; everything resets to *to do* the next morning.
 
+Tap the 🌸 badge in the header for the **streak view**: current and best streak, days moved, perfect days, an 8-week calendar and the recent-days list.
+
 - **Tailwind CSS** (Play CDN) + **Alpine.js** — no build step, no framework, no server.
 - `workouts.json` is the read-only "database" — edit it to change the list.
 - Progress, timestamps, a 14-day history and a streak live in `localStorage` (key `workout-tracker-v1`).

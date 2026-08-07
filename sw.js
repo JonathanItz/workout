@@ -1,5 +1,5 @@
 // Bump VERSION to push a new build to installed devices.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL = `movement-shell-${VERSION}`;
 const RUNTIME = `movement-runtime-${VERSION}`;
 

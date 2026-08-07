@@ -3,10 +3,20 @@ const STORAGE_KEY = 'workout-tracker-v1';
 /** The hour the app stops defaulting to the Morning tab. */
 const EVENING_STARTS_AT = 12;
 
+/** How many weeks the streak calendar shows. */
+const CALENDAR_WEEKS = 8;
+
 /** Local (not UTC) YYYY-MM-DD — the day boundary should follow the user's clock. */
 function todayKey(d = new Date()) {
 	const pad = (n) => String(n).padStart(2, '0');
 	return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** Date maths on a YYYY-MM-DD key. Goes through local Date so DST can't drop a day. */
+function shiftKey(key, days) {
+	const d = new Date(`${key}T00:00:00`);
+	d.setDate(d.getDate() + days);
+	return todayKey(d);
 }
 
 function loadState() {
@@ -34,7 +44,7 @@ function workoutApp() {
 		history: {},
 		date: todayKey(),
 		tab: 'morning',
-		showHistory: false,
+		view: 'today',
 
 		async init() {
 			this.restore();
@@ -185,35 +195,111 @@ function workoutApp() {
 			return this.total > 0 && this.doneCount === this.total;
 		},
 
-		/** Consecutive days ending today (or yesterday, if today is still empty) with ≥1 completion. */
-		get streak() {
-			const days = { ...this.history };
-			if (this.doneCount > 0) days[this.date] = this.doneCount;
+		// ---- Streak & history -------------------------------------------------
 
+		/**
+		 * What happened on a given day, or null if nothing did. Today comes from live
+		 * state — it only lands in `history` at tomorrow's rollover.
+		 */
+		record(key) {
+			if (key === this.date) {
+				return this.doneCount > 0 ? { count: this.doneCount, total: this.total } : null;
+			}
+			const entry = this.history[key];
+			if (!entry) return null;
+			// Older entries were stored as a bare count.
+			const count = typeof entry === 'number' ? entry : entry.count;
+			const total = typeof entry === 'number' ? entry : entry.total || count;
+			return count > 0 ? { count, total } : null;
+		},
+
+		/** Every day with at least one workout ticked off, oldest first. */
+		get activeDays() {
+			const keys = Object.keys(this.history).filter((k) => this.record(k));
+			if (this.doneCount > 0) keys.push(this.date);
+			return [...new Set(keys)].sort();
+		},
+
+		/** Consecutive days ending today (or yesterday, if today is still empty). */
+		get streak() {
+			let cursor = this.record(this.date) ? this.date : shiftKey(this.date, -1);
 			let streak = 0;
-			const cursor = new Date();
-			if (!days[todayKey(cursor)]) cursor.setDate(cursor.getDate() - 1);
-			while (days[todayKey(cursor)]) {
+			while (this.record(cursor)) {
 				streak++;
-				cursor.setDate(cursor.getDate() - 1);
+				cursor = shiftKey(cursor, -1);
 			}
 			return streak;
 		},
 
+		get bestStreak() {
+			const days = this.activeDays;
+			let best = 0;
+			let run = 0;
+			days.forEach((key, i) => {
+				run = i > 0 && days[i - 1] === shiftKey(key, -1) ? run + 1 : 1;
+				best = Math.max(best, run);
+			});
+			return best;
+		},
+
+		get daysMoved() {
+			return this.activeDays.length;
+		},
+
+		/** Days where everything scheduled got ticked off. */
+		get perfectDays() {
+			return this.activeDays.filter((key) => {
+				const r = this.record(key);
+				return r && r.total > 0 && r.count >= r.total;
+			}).length;
+		},
+
+		/**
+		 * A flat Sun-first run of days ending with the current week — the 7-column
+		 * grid lays it out in rows, so no week nesting is needed.
+		 */
+		get calendarCells() {
+			const today = new Date(`${this.date}T00:00:00`);
+			const start = new Date(today);
+			// Back up to the Sunday that starts the first row.
+			start.setDate(start.getDate() - today.getDay() - (CALENDAR_WEEKS - 1) * 7);
+
+			return Array.from({ length: CALENDAR_WEEKS * 7 }, (_, i) => {
+				const cur = new Date(start);
+				cur.setDate(start.getDate() + i);
+				const key = todayKey(cur);
+				const rec = this.record(key);
+				return {
+					key,
+					day: cur.getDate(),
+					isToday: key === this.date,
+					future: key > this.date,
+					full: Boolean(rec && rec.total > 0 && rec.count >= rec.total),
+					partial: Boolean(rec) && !(rec.total > 0 && rec.count >= rec.total),
+					label: rec ? `${this.formatDay(key)} — ${rec.count}/${rec.total}` : this.formatDay(key),
+				};
+			});
+		},
+
+		cellClass(cell) {
+			if (cell.future) return 'border-2 border-dashed border-petal/60 text-petal';
+			if (cell.full) return 'bg-rosy text-white';
+			if (cell.partial) return 'bg-petal text-berry';
+			return 'border-2 border-petal bg-white text-faded';
+		},
+
 		get historyRows() {
-			return Object.entries(this.history)
-				.sort((a, b) => b[0].localeCompare(a[0]))
+			return [...this.activeDays]
+				.reverse()
 				.slice(0, 14)
-				.map(([date, entry]) => {
-					// Older entries were stored as a bare count.
-					const count = typeof entry === 'number' ? entry : entry.count;
-					const total = typeof entry === 'number' ? entry : entry.total || count;
+				.map((date) => {
+					const { count, total } = this.record(date);
 					return {
 						date,
 						count,
 						total,
 						percent: total ? Math.min(100, Math.round((count / total) * 100)) : 0,
-						label: this.formatDay(date),
+						label: date === this.date ? 'Today' : this.formatDay(date),
 					};
 				});
 		},
