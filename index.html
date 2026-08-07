@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fff1f5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="description" content="A tiny daily workout checklist that resets every morning." />
+    <title>Daily Movement</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,600&family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Quicksand', 'system-ui', '-apple-system', 'sans-serif'],
+              display: ['Fraunces', 'Georgia', 'serif'],
+            },
+            colors: {
+              cream: '#fff7f9',
+              blush: '#ffe4ec',
+              petal: '#ffd0e0',
+              rosy: '#f4699b',
+              berry: '#d63f7e',
+              lilac: '#c9a7ef',
+              ink: '#5c3247',
+              faded: '#a9819a',
+            },
+            boxShadow: {
+              soft: '0 8px 24px -12px rgba(214, 63, 126, 0.28)',
+              lift: '0 14px 30px -14px rgba(214, 63, 126, 0.4)',
+            },
+            keyframes: {
+              pop: { '0%': { transform: 'scale(.8)' }, '60%': { transform: 'scale(1.08)' }, '100%': { transform: 'scale(1)' } },
+              rise: { from: { opacity: 0, transform: 'translateY(8px)' }, to: { opacity: 1, transform: 'none' } },
+            },
+            animation: { pop: 'pop .3s ease-out', rise: 'rise .3s ease-out both' },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #fff1f5;
+        -webkit-tap-highlight-color: transparent;
+      }
+      [x-cloak] { display: none !important; }
+    </style>
+    <script src="app.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  </head>
+
+  <body class="min-h-screen bg-cream font-sans text-ink antialiased selection:bg-petal">
+    <main
+      x-data="workoutApp()"
+      x-cloak
+      class="mx-auto w-full max-w-lg px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-[calc(1.75rem+env(safe-area-inset-top))]"
+    >
+      <!-- Header -->
+      <header class="mb-6">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rosy" x-text="prettyDate"></p>
+        <div class="mt-1.5 flex items-start justify-between gap-4">
+          <div>
+            <h1 class="font-display text-4xl italic leading-tight text-berry" x-text="title"></h1>
+            <p class="mt-1 text-sm font-medium text-faded" x-text="subtitle"></p>
+          </div>
+          <div
+            x-show="streak > 0"
+            class="shrink-0 rounded-full border-2 border-petal bg-white px-3 py-1.5 text-sm font-bold text-berry shadow-soft"
+          >
+            🌸 <span x-text="streak"></span><span class="ml-0.5 text-xs font-semibold text-rosy">d</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Error -->
+      <div
+        x-show="error"
+        class="mb-6 rounded-3xl border-2 border-rose-200 bg-rose-50 p-4 text-sm font-medium text-rose-500"
+        x-text="error"
+      ></div>
+
+      <!-- Loading -->
+      <div x-show="loading" class="space-y-3">
+        <template x-for="i in 4" :key="i">
+          <div class="h-[78px] animate-pulse rounded-3xl bg-blush"></div>
+        </template>
+      </div>
+
+      <div x-show="!loading && total" class="space-y-8">
+        <!-- Progress card -->
+        <section class="flex items-center gap-5 rounded-[28px] border-2 border-petal bg-white p-5 shadow-soft">
+          <div class="relative h-[86px] w-[86px] shrink-0">
+            <svg viewBox="0 0 80 80" class="h-full w-full -rotate-90">
+              <circle cx="40" cy="40" r="34" fill="none" stroke="#ffe4ec" stroke-width="8" />
+              <circle
+                cx="40" cy="40" r="34" fill="none" stroke="#f4699b" stroke-width="8" stroke-linecap="round"
+                :stroke-dasharray="ringDash"
+                class="transition-all duration-700 ease-out"
+              />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="font-display text-xl italic text-berry" x-text="percent + '%'"></span>
+            </div>
+          </div>
+
+          <div class="min-w-0 flex-1">
+            <p class="text-lg font-bold">
+              <span x-text="doneCount"></span> of <span x-text="total"></span> done
+            </p>
+            <p class="mt-0.5 text-sm font-medium text-faded">
+              <span x-show="!allDone" x-text="minutesLeft > 0 ? `~${minutesLeft} min left today` : 'Almost there'"></span>
+              <span x-show="allDone" class="font-bold text-rosy">All done, gorgeous. 💖</span>
+            </p>
+            <button
+              x-show="doneCount > 0"
+              @click="resetToday()"
+              class="mt-2 text-xs font-semibold text-faded underline decoration-petal decoration-2 underline-offset-4 transition hover:text-rosy"
+            >
+              Reset today
+            </button>
+          </div>
+        </section>
+
+        <!-- To do -->
+        <section>
+          <div class="mb-3 flex items-baseline justify-between px-1">
+            <h2 class="text-xs font-bold uppercase tracking-[0.18em] text-rosy">To do</h2>
+            <span class="text-xs font-bold tabular-nums text-faded" x-text="todo.length"></span>
+          </div>
+
+          <ul class="space-y-3">
+            <template x-for="w in todo" :key="w.id">
+              <li class="animate-rise">
+                <button
+                  @click="toggle(w)"
+                  class="group flex w-full items-center gap-4 rounded-[26px] border-2 border-petal bg-white p-4 text-left shadow-soft transition active:scale-[0.985] hover:border-rosy hover:shadow-lift"
+                >
+                  <span
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border-[3px] border-petal transition group-hover:border-rosy"
+                    role="checkbox"
+                    :aria-checked="false"
+                  ></span>
+
+                  <span class="min-w-0 flex-1">
+                    <span class="flex items-center gap-2">
+                      <span class="text-base" x-text="w.icon"></span>
+                      <span class="truncate font-bold" x-text="w.name"></span>
+                    </span>
+                    <span class="mt-0.5 block truncate text-sm font-medium text-faded" x-text="w.detail"></span>
+                  </span>
+
+                  <span
+                    class="shrink-0 rounded-full bg-blush px-2.5 py-1 text-[11px] font-bold text-berry"
+                    x-text="w.tag"
+                  ></span>
+                </button>
+              </li>
+            </template>
+          </ul>
+
+          <p
+            x-show="todo.length === 0"
+            class="rounded-[26px] border-2 border-dashed border-petal bg-white p-6 text-center text-sm font-semibold text-rosy"
+          >
+            Nothing left, you did it all. See you tomorrow 🌷
+          </p>
+        </section>
+
+        <!-- Completed -->
+        <section x-show="done.length" x-transition.opacity>
+          <div class="mb-3 flex items-baseline justify-between px-1">
+            <h2 class="text-xs font-bold uppercase tracking-[0.18em] text-lilac">Completed</h2>
+            <span class="text-xs font-bold tabular-nums text-faded" x-text="done.length"></span>
+          </div>
+
+          <ul class="space-y-2">
+            <template x-for="w in done" :key="w.id">
+              <li class="animate-rise">
+                <button
+                  @click="toggle(w)"
+                  class="flex w-full items-center gap-4 rounded-[26px] border-2 border-blush bg-blush p-3.5 text-left transition active:scale-[0.985] hover:border-petal"
+                >
+                  <span
+                    class="flex h-7 w-7 shrink-0 animate-pop items-center justify-center rounded-xl bg-rosy text-white"
+                    role="checkbox"
+                    :aria-checked="true"
+                  >
+                    <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4">
+                      <path d="M4.5 10.5l3.5 3.5 7.5-8" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+
+                  <span class="min-w-0 flex-1">
+                    <span class="flex items-center gap-2">
+                      <span class="text-base opacity-50" x-text="w.icon"></span>
+                      <span class="truncate font-bold text-faded line-through decoration-petal decoration-2" x-text="w.name"></span>
+                    </span>
+                    <span class="mt-0.5 block text-xs font-semibold text-rosy" x-text="'Done at ' + formatTime(completed[w.id])"></span>
+                  </span>
+
+                  <span class="shrink-0 text-[11px] font-bold text-faded">Undo</span>
+                </button>
+              </li>
+            </template>
+          </ul>
+        </section>
+
+        <!-- History -->
+        <section x-show="historyRows.length">
+          <button
+            @click="showHistory = !showHistory"
+            class="flex w-full items-center justify-between rounded-[26px] border-2 border-petal bg-white px-4 py-3 text-sm font-bold text-berry shadow-soft transition hover:border-rosy"
+          >
+            <span>Recent days</span>
+            <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4 text-rosy transition-transform" :class="showHistory && 'rotate-180'">
+              <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+
+          <ul x-show="showHistory" x-transition class="mt-2 space-y-1.5">
+            <template x-for="row in historyRows" :key="row.date">
+              <li class="flex items-center justify-between rounded-2xl px-4 py-2 text-sm">
+                <span class="font-semibold text-faded" x-text="row.label"></span>
+                <span class="flex items-center gap-2">
+                  <span class="h-2 w-24 overflow-hidden rounded-full bg-blush">
+                    <span
+                      class="block h-full rounded-full bg-lilac"
+                      :style="`width: ${total ? Math.min(100, (row.count / total) * 100) : 0}%`"
+                    ></span>
+                  </span>
+                  <span class="w-10 text-right text-xs font-bold tabular-nums text-faded" x-text="`${row.count}/${total}`"></span>
+                </span>
+              </li>
+            </template>
+          </ul>
+        </section>
+
+        <p class="pt-2 text-center text-xs font-semibold text-faded">Resets automatically every morning</p>
+      </div>
+    </main>
+  </body>
+</html>
