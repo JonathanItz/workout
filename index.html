@@ -70,8 +70,12 @@
 			}
 		}
 
+		/* `backwards`, not `both`: it still holds the from-state through the stagger delay,
+		   but drops `filter: blur(0)` once the animation ends. Leaving a filter applied
+		   keeps the element on its own composited layer, which iOS Safari sometimes
+		   rasterizes at the wrong scale — text stays permanently blurry. */
 		.animate-reveal {
-			animation: animate-reveal 700ms ease-out both;
+			animation: animate-reveal 700ms ease-out backwards;
 			animation-delay: var(--animate-reveal-delay, 0ms);
 		}
 
