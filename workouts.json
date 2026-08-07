@@ -1,70 +1,106 @@
 {
-  "title": "Daily Movement",
-  "subtitle": "Small reps, every day.",
-  "workouts": [
-    {
-      "id": "walk-10",
-      "name": "10 min walk",
-      "detail": "Outside if you can — brisk pace",
-      "icon": "🚶",
-      "tag": "Cardio",
-      "minutes": 10
-    },
-    {
-      "id": "squats-15",
-      "name": "15 squats",
-      "detail": "Feet shoulder width, chest up",
-      "icon": "🦵",
-      "tag": "Legs",
-      "minutes": 3
-    },
-    {
-      "id": "pushups-10",
-      "name": "10 push ups",
-      "detail": "Knees down is still a rep",
-      "icon": "💪",
-      "tag": "Upper body",
-      "minutes": 3
-    },
-    {
-      "id": "plank-60",
-      "name": "60 second plank",
-      "detail": "Hips level, breathe",
-      "icon": "🧱",
-      "tag": "Core",
-      "minutes": 2
-    },
-    {
-      "id": "lunges-20",
-      "name": "20 walking lunges",
-      "detail": "10 each leg, slow and controlled",
-      "icon": "🚀",
-      "tag": "Legs",
-      "minutes": 4
-    },
-    {
-      "id": "stretch-5",
-      "name": "5 min stretch",
-      "detail": "Hamstrings, hips, shoulders",
-      "icon": "🧘",
-      "tag": "Mobility",
-      "minutes": 5
-    },
-    {
-      "id": "situps-20",
-      "name": "20 sit ups",
-      "detail": "Hands crossed on chest",
-      "icon": "🔥",
-      "tag": "Core",
-      "minutes": 3
-    },
-    {
-      "id": "water-2l",
-      "name": "Drink 2L water",
-      "detail": "Spread it across the day",
-      "icon": "💧",
-      "tag": "Habit",
-      "minutes": 0
-    }
-  ]
+	"title": "Daily Movement",
+	"subtitle": "Small reps, every day.",
+	"workouts": [
+		{
+			"id": "squats-20-am",
+			"name": "20 squats",
+			"detail": "Feet shoulder width, chest up",
+			"icon": "🦵",
+			"tag": "Legs",
+			"period": "morning",
+			"minutes": 4
+		},
+		{
+			"id": "plank-60-am",
+			"name": "1 min plank",
+			"detail": "Hips level, breathe",
+			"icon": "🧘",
+			"tag": "Core",
+			"period": "morning",
+			"minutes": 2
+		},
+		{
+			"id": "pushups-10",
+			"name": "10 push ups",
+			"detail": "Knees down is still a rep",
+			"icon": "💪",
+			"tag": "Upper body",
+			"period": "morning",
+			"minutes": 3
+		},
+		{
+			"id": "treadmill-35",
+			"name": "35 min treadmill walk",
+			"detail": "Steady pace, slight incline",
+			"icon": "🏃",
+			"tag": "Cardio",
+			"period": "morning",
+			"minutes": 35
+		},
+		{
+			"id": "resistance-tts",
+			"name": "Resistance training",
+			"detail": "Bands or weights — full body",
+			"icon": "🏋️",
+			"tag": "Strength",
+			"period": "evening",
+			"minutes": 30,
+			"days": [2, 4, 6]
+		},
+		{
+			"id": "squats-20-pm",
+			"name": "20 squats",
+			"detail": "Second set of the day",
+			"icon": "🦵",
+			"tag": "Legs",
+			"period": "evening",
+			"minutes": 4
+		},
+		{
+			"id": "plank-60-pm",
+			"name": "1 min plank",
+			"detail": "Hold steady, no sagging",
+			"icon": "🧘",
+			"tag": "Core",
+			"period": "evening",
+			"minutes": 2
+		},
+		{
+			"id": "situps-20",
+			"name": "20 sit ups",
+			"detail": "Hands crossed on chest",
+			"icon": "🔥",
+			"tag": "Core",
+			"period": "evening",
+			"minutes": 3
+		},
+		{
+			"id": "lunges-20",
+			"name": "20 walking lunges",
+			"detail": "10 each leg, slow and controlled",
+			"icon": "🚀",
+			"tag": "Legs",
+			"period": "evening",
+			"minutes": 4
+		},
+		{
+			"id": "stretch-5",
+			"name": "5 min stretch",
+			"detail": "Hamstrings, hips, shoulders",
+			"icon": "🌙",
+			"tag": "Mobility",
+			"period": "evening",
+			"minutes": 5
+		},
+		{
+			"id": "water-2l",
+			"name": "Drink 2L water",
+			"detail": "Spread it across the day",
+			"icon": "💧",
+			"tag": "Habit",
+			"period": "any",
+			"minutes": 0
+		}
+	]
 }
