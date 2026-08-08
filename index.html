@@ -131,6 +131,11 @@
 					</template>
 				</button>
 			</div>
+
+			<p x-show="todaysFocus"
+				class="mt-3 inline-flex items-center gap-1.5 rounded-full border-2 border-petal bg-white px-3 py-1 text-xs font-bold text-berry shadow-soft">
+				<span>🎯</span><span x-text="`Tonight: ${todaysFocus}`"></span>
+			</p>
 		</header>
 
 		<!-- Error -->
@@ -221,7 +226,7 @@
 									</span>
 									<span class="mt-0.5 block truncate text-sm font-medium text-faded"
 										x-text="w.detail"></span>
-									<span x-show="w.days"
+									<span x-show="scheduleLabel(w)"
 										class="mt-1 inline-block rounded-full bg-cream px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-lilac"
 										x-text="scheduleLabel(w)"></span>
 								</span>

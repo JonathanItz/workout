@@ -38,6 +38,8 @@ function workoutApp() {
 		title: 'Daily Movement',
 		subtitle: '',
 		workouts: [],
+		// { "0"–"6": label } — the muscle group each weekday targets
+		focus: {},
 		// { [workoutId]: ISO timestamp } for today only
 		completed: {},
 		// { [YYYY-MM-DD]: { count, total } } for previous days
@@ -60,6 +62,7 @@ function workoutApp() {
 				this.title = data.title || this.title;
 				this.subtitle = data.subtitle || '';
 				this.workouts = data.workouts || [];
+				this.focus = data.focus || {};
 				// Drop completions for workouts that no longer exist in the JSON.
 				const ids = new Set(this.workouts.map((w) => w.id));
 				for (const id of Object.keys(this.completed)) {
@@ -121,10 +124,20 @@ function workoutApp() {
 
 		// ---- Scheduling -------------------------------------------------------
 
+		/** 0=Sun … 6=Sat for the day the app is currently showing. */
+		get dayOfWeek() {
+			return new Date(`${this.date}T00:00:00`).getDay();
+		},
+
 		/** `days` is 0=Sun … 6=Sat; a workout with no `days` runs every day. */
 		get todaysWorkouts() {
-			const dow = new Date(`${this.date}T00:00:00`).getDay();
+			const dow = this.dayOfWeek;
 			return this.workouts.filter((w) => !Array.isArray(w.days) || w.days.includes(dow));
+		},
+
+		/** e.g. "Back & Biceps" — the muscle group tonight's block trains. */
+		get todaysFocus() {
+			return this.focus[this.dayOfWeek] || '';
 		},
 
 		/** Workouts in a given tab. `period: "any"` shows up in both. */
@@ -132,9 +145,12 @@ function workoutApp() {
 			return this.todaysWorkouts.filter((w) => w.period === period || w.period === 'any');
 		},
 
-		/** e.g. "Tue · Thu · Sat" for a workout that only runs some days. */
+		/**
+		 * e.g. "Tue · Thu · Sat" for a workout that only runs some days. Single-day
+		 * workouts say nothing the focus badge hasn't already said, so they get no chip.
+		 */
 		scheduleLabel(workout) {
-			if (!Array.isArray(workout.days)) return '';
+			if (!Array.isArray(workout.days) || workout.days.length < 2) return '';
 			const names = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 			return workout.days.map((d) => names[d]).join(' · ');
 		},
@@ -311,15 +327,19 @@ function workoutApp() {
 
 		// ---- Presentation -----------------------------------------------------
 
-		/** Flat chip colours, keyed off the workout's tag. */
+		/** Flat chip colours, one per muscle group. */
 		tagClass(tag) {
 			return {
-				Cardio: 'bg-blush text-berry',
+				Back: 'bg-[#dcf1ea] text-[#2f7a63]',
 				Legs: 'bg-[#f0e4fb] text-[#7d54b3]',
+				Glutes: 'bg-[#f7e0ef] text-[#a04a86]',
+				Chest: 'bg-[#ffe8d6] text-[#c2652a]',
+				Shoulders: 'bg-[#fdf0cd] text-[#96701c]',
+				Arms: 'bg-[#ffe2dd] text-[#b6503f]',
 				Core: 'bg-[#e4ecfb] text-[#4a6aa8]',
-				'Upper body': 'bg-[#dcf1ea] text-[#2f7a63]',
-				Strength: 'bg-[#ffe8d6] text-[#c2652a]',
-				Mobility: 'bg-[#fdf0cd] text-[#96701c]',
+				'Full body': 'bg-[#e8e4fb] text-[#5a54b3]',
+				Cardio: 'bg-blush text-berry',
+				Mobility: 'bg-[#e6f3dd] text-[#5a7f3c]',
 				Habit: 'bg-[#dff2f7] text-[#2b7a8c]',
 			}[tag] || 'bg-blush text-berry';
 		},

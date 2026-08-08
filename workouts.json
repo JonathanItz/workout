@@ -1,117 +1,269 @@
 {
 	"title": "Daily Movement",
 	"subtitle": "Small reps, every day.",
+	"focus": {
+		"0": "Rest & recovery",
+		"1": "Back",
+		"2": "Legs",
+		"3": "Chest",
+		"4": "Core",
+		"5": "Shoulders & Arms",
+		"6": "Full body"
+	},
 	"workouts": [
 		{
-			"id": "squats-20-am",
-			"name": "20 squats",
+			"id": "pmos-training",
+			"name": "PMOS training",
+			"detail": "Get it done early",
+			"icon": "💪",
+			"tag": "PMOS",
+			"period": "morning",
+			"minutes": 20
+		},
+		{
+			"id": "water-1l-morning",
+			"name": "Drink water",
+			"detail": "Spread it across the day",
+			"icon": "💧",
+			"tag": "Habit",
+			"period": "morning",
+			"minutes": 0
+		},
+		{
+			"id": "water-1l-evening",
+			"name": "Drink water",
+			"detail": "Spread it across the day",
+			"icon": "💧",
+			"tag": "Habit",
+			"period": "evening",
+			"minutes": 0
+		},
+
+		{
+			"id": "rows-mon",
+			"name": "Bent-over rows",
+			"detail": "Bands or weights, pull to the ribs",
+			"icon": "🚣",
+			"tag": "Back",
+			"period": "evening",
+			"minutes": 8,
+			"days": [1]
+		},
+		{
+			"id": "supermans-mon",
+			"name": "Supermans",
+			"detail": "Face down, lift chest and legs",
+			"icon": "🦸",
+			"tag": "Back",
+			"period": "evening",
+			"minutes": 5,
+			"days": [1]
+		},
+		{
+			"id": "curls-mon",
+			"name": "Bicep curls",
+			"detail": "Elbows in, no swinging",
+			"icon": "🏋️",
+			"tag": "Arms",
+			"period": "evening",
+			"minutes": 6,
+			"days": [1]
+		},
+
+		{
+			"id": "squats-tue",
+			"name": "Squats",
 			"detail": "Feet shoulder width, chest up",
 			"icon": "🦵",
 			"tag": "Legs",
-			"period": "morning",
-			"minutes": 4
+			"period": "evening",
+			"minutes": 8,
+			"days": [2]
 		},
 		{
-			"id": "plank-60-am",
-			"name": "1 min plank",
+			"id": "lunges-tue",
+			"name": "Walking lunges",
+			"detail": "Slow and controlled, both legs",
+			"icon": "🚀",
+			"tag": "Legs",
+			"period": "evening",
+			"minutes": 6,
+			"days": [2]
+		},
+		{
+			"id": "glute-bridges-tue",
+			"name": "Glute bridges",
+			"detail": "Squeeze at the top",
+			"icon": "🍑",
+			"tag": "Glutes",
+			"period": "evening",
+			"minutes": 5,
+			"days": [2]
+		},
+
+		{
+			"id": "pushups-wed",
+			"name": "Push ups",
+			"detail": "Knees down if you need to",
+			"icon": "💥",
+			"tag": "Chest",
+			"period": "evening",
+			"minutes": 6,
+			"days": [3]
+		},
+		{
+			"id": "floor-press-wed",
+			"name": "Floor press",
+			"detail": "Bands or weights, elbows tucked",
+			"icon": "🛏️",
+			"tag": "Chest",
+			"period": "evening",
+			"minutes": 7,
+			"days": [3]
+		},
+		{
+			"id": "chair-dips-wed",
+			"name": "Chair dips",
+			"detail": "Edge of a chair, elbows straight back",
+			"icon": "🪑",
+			"tag": "Arms",
+			"period": "evening",
+			"minutes": 6,
+			"days": [3]
+		},
+
+		{
+			"id": "plank-thu",
+			"name": "Plank",
 			"detail": "Hips level, breathe",
 			"icon": "🧘",
 			"tag": "Core",
-			"period": "morning",
-			"minutes": 2
-		},
-		{
-			"id": "treadmill-35",
-			"name": "35 min treadmill walk",
-			"detail": "Steady pace, slight incline",
-			"icon": "🏃",
-			"tag": "Cardio",
-			"period": "morning",
-			"minutes": 35
-		},
-		{
-			"id": "resistance-tts",
-			"name": "Resistance training",
-			"detail": "Bands or weights — full body",
-			"icon": "🏋️",
-			"tag": "Strength",
 			"period": "evening",
-			"minutes": 30,
-			"days": [2, 4, 6]
+			"minutes": 5,
+			"days": [4]
 		},
 		{
-			"id": "squats-20-pm",
-			"name": "20 squats",
-			"detail": "Second set of the day",
-			"icon": "🦵",
-			"tag": "Legs",
-			"period": "evening",
-			"minutes": 4
-		},
-		{
-			"id": "plank-60-pm",
-			"name": "1 min plank",
-			"detail": "Hold steady, no sagging",
-			"icon": "🧘",
-			"tag": "Core",
-			"period": "evening",
-			"minutes": 2
-		},
-		{
-			"id": "situps-20",
-			"name": "20 sit ups",
+			"id": "situps-thu",
+			"name": "Sit ups",
 			"detail": "Hands crossed on chest",
 			"icon": "🔥",
 			"tag": "Core",
 			"period": "evening",
-			"minutes": 3
+			"minutes": 6,
+			"days": [4]
 		},
 		{
-			"id": "lunges-20",
-			"name": "20 walking lunges",
-			"detail": "10 each leg, slow and controlled",
-			"icon": "🚀",
-			"tag": "Legs",
+			"id": "leg-raises-thu",
+			"name": "Leg raises",
+			"detail": "Lower back flat, control the drop",
+			"icon": "🔻",
+			"tag": "Core",
 			"period": "evening",
-			"minutes": 4,
-			"days": [1, 3, 5]
+			"minutes": 5,
+			"days": [4]
+		},
+
+		{
+			"id": "shoulder-press-fri",
+			"name": "Shoulder press",
+			"detail": "Bands or weights, press overhead",
+			"icon": "🏋️",
+			"tag": "Shoulders",
+			"period": "evening",
+			"minutes": 7,
+			"days": [5]
 		},
 		{
-			"id": "back",
-			"name": "Back",
-			"detail": "Overall back workout",
-			"icon": "🥵",
-			"tag": "Back",
+			"id": "lateral-raises-fri",
+			"name": "Lateral raises",
+			"detail": "Light weight, up to shoulder height",
+			"icon": "🕊️",
+			"tag": "Shoulders",
 			"period": "evening",
-			"minutes": 2,
-			"days": [1, 3, 5]
+			"minutes": 5,
+			"days": [5]
 		},
+		{
+			"id": "hammer-curls-fri",
+			"name": "Hammer curls",
+			"detail": "Thumbs up, elbows still",
+			"icon": "💪",
+			"tag": "Arms",
+			"period": "evening",
+			"minutes": 6,
+			"days": [5]
+		},
+
+		{
+			"id": "burpees-sat",
+			"name": "Burpees",
+			"detail": "Step back instead of jumping if you need",
+			"icon": "⚡",
+			"tag": "Full body",
+			"period": "evening",
+			"minutes": 6,
+			"days": [6]
+		},
+		{
+			"id": "mountain-climbers-sat",
+			"name": "Mountain climbers",
+			"detail": "Hips low, quick feet",
+			"icon": "🏔️",
+			"tag": "Full body",
+			"period": "evening",
+			"minutes": 5,
+			"days": [6]
+		},
+		{
+			"id": "jumping-jacks-sat",
+			"name": "Jumping jacks",
+			"detail": "Steady rhythm, keep breathing",
+			"icon": "🤸",
+			"tag": "Cardio",
+			"period": "evening",
+			"minutes": 5,
+			"days": [6]
+		},
+
+		{
+			"id": "walk-sun",
+			"name": "Easy walk",
+			"detail": "Nothing hard, just move",
+			"icon": "🚶",
+			"tag": "Cardio",
+			"period": "evening",
+			"minutes": 20,
+			"days": [0]
+		},
+		{
+			"id": "hip-openers-sun",
+			"name": "Hip openers",
+			"detail": "Pigeon and 90/90, both sides",
+			"icon": "🪷",
+			"tag": "Mobility",
+			"period": "evening",
+			"minutes": 8,
+			"days": [0]
+		},
+		{
+			"id": "shoulder-release-sun",
+			"name": "Shoulder release",
+			"detail": "Doorway stretch and slow rolls",
+			"icon": "🌸",
+			"tag": "Mobility",
+			"period": "evening",
+			"minutes": 6,
+			"days": [0]
+		},
+
 		{
 			"id": "stretch-5",
-			"name": "5 min stretch",
-			"detail": "Hamstrings, hips, shoulders",
+			"name": "Stretch",
+			"detail": "Whatever you trained today, plus hips",
 			"icon": "🌙",
 			"tag": "Mobility",
 			"period": "evening",
-			"minutes": 5
-		},
-		{
-			"id": "water-1l-eveing",
-			"name": "Drink 1L water",
-			"detail": "Spread it across the day",
-			"icon": "💧",
-			"tag": "Habit",
-			"period": "evening",
-			"minutes": 0
-		},
-		{
-			"id": "water-1l-morning",
-			"name": "Drink 1L water",
-			"detail": "Spread it across the day",
-			"icon": "💧",
-			"tag": "Habit",
-			"period": "morning",
-			"minutes": 0
+			"minutes": 10
 		}
 	]
 }
