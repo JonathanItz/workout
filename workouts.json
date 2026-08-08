@@ -21,15 +21,6 @@
 			"minutes": 2
 		},
 		{
-			"id": "pushups-10",
-			"name": "10 push ups",
-			"detail": "Knees down is still a rep",
-			"icon": "💪",
-			"tag": "Upper body",
-			"period": "morning",
-			"minutes": 3
-		},
-		{
 			"id": "treadmill-35",
 			"name": "35 min treadmill walk",
 			"detail": "Steady pace, slight incline",
